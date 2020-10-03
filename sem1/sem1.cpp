@@ -179,8 +179,8 @@ public:
             std::execution::seq,
             tests_.begin(), tests_.end(),
             0u,
-            std::plus<unsigned>{},
-            [function = function_](const Test& test) {
+            std::plus<>{},
+            [function = function_](const Test& test) -> unsigned int {
                 return test.result_checker(std::apply(function, test.args));
             }
         );
@@ -194,8 +194,8 @@ public:
             std::execution::par,
             tests_.begin(), tests_.end(),
             0u,
-            std::plus<unsigned>{},
-            [function = function_](const Test& test) {
+            std::plus<>{},
+            [function = function_](const Test& test) -> unsigned int {
                 return test.result_checker(std::apply(function, test.args));
             }
         );
@@ -206,11 +206,11 @@ public:
         std::vector<std::thread> thread_pool;
         std::atomic_int cur_test = -1;
         std::atomic_int ok_count = 0;
-        for (int i = 0; i < std::thread::hardware_concurrency(); ++i) {
+        for (size_t i = 0; i < std::thread::hardware_concurrency(); ++i) {
             thread_pool.emplace_back(
                 [&cur_test, &ok_count, tests = &tests_, function = function_](){
                     while (true) {
-                        int next_test = ++cur_test;
+                        size_t next_test = ++cur_test;
                         if (next_test >= tests->size()) {
                             break;
                         }

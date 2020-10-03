@@ -64,7 +64,7 @@ g++-9 seminar_test_func.cpp --std=c++17 –ltbb –lpthread
     * В отличие от оригинальной инструкции, нам понадобится еще подключить библиотеку
         libpthread (`-lpthread`)
 
-    * У меня получилось без `-Wl`, см. файл [build-ubuntu.sh](build-ubuntu.sh).
+    * У меня получилось без `-Wl`, см. файл [sem1/build-ubuntu.sh](build-ubuntu.sh).
 
 ### Macos
 

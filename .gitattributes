@@ -1,0 +1,9 @@
+# *.cpp          text eol=lf
+*.sln          text
+# *.h            text eol=lf
+.git*          text
+*.md           text
+*.sh           text
+# *.sln          text eol=crlf
+*.vcxproj      text eol=crlf
+

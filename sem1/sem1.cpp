@@ -179,7 +179,7 @@ public:
             std::execution::seq,
             tests_.begin(), tests_.end(),
             0u,
-            std::plus<>{},
+            std::plus<unsigned>{},
             [function = function_](const Test& test) {
                 return test.result_checker(std::apply(function, test.args));
             }
@@ -194,7 +194,7 @@ public:
             std::execution::par,
             tests_.begin(), tests_.end(),
             0u,
-            std::plus<>{},
+            std::plus<unsigned>{},
             [function = function_](const Test& test) {
                 return test.result_checker(std::apply(function, test.args));
             }

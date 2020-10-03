@@ -295,39 +295,40 @@ int main() {
 #define PROFILE(method) { LOG_DURATION(#method); checker.method(); }
 
     // прогоняем тесты, выводя результат каждого
+    {
+        const auto long_queries = GenerateQueries(generator, 10, 20'000'000, 4);
+        AddQueriesToCheck(checker, long_queries);
+        
+        PROFILE(RunSeq);
+        PROFILE(RunAsyncPrintAfter);
+        PROFILE(RunAsyncPrintEarly);
 
-    const auto long_queries = GenerateQueries(generator, 10, 20'000'000, 4);
-    AddQueriesToCheck(checker, long_queries);
-
-    PROFILE(RunSeq);
-    PROFILE(RunAsyncPrintAfter);
-    PROFILE(RunAsyncPrintEarly);
-
-    checker.ClearTests();
-    std::cerr << std::endl;
-
+        checker.ClearTests();
+        std::cerr << std::endl;
+    }
+    
     // прогоняем тесты, выводя количество успешных
-
-    const auto short_queries = GenerateQueries(generator, 100'000, 10, 4);
-    AddQueriesToCheck(checker, short_queries);
-
-    PROFILE(RunAsyncCountOksNaive);
-    PROFILE(RunAsyncCountOksLocalMutex);
-    PROFILE(RunAsyncCountOksWideMutex);
-    PROFILE(RunAsyncCountOksRightMutex);
-    PROFILE(RunAsyncCountOksAtomic);
-    PROFILE(RunSeqCountOks);
-
-    checker.ClearTests();
-    std::cerr << std::endl;
+    {
+        const auto short_queries = GenerateQueries(generator, 100'000, 10, 4);
+        AddQueriesToCheck(checker, short_queries);
+        PROFILE(RunAsyncCountOksNaive);
+        PROFILE(RunAsyncCountOksLocalMutex);
+        PROFILE(RunAsyncCountOksWideMutex);
+        PROFILE(RunAsyncCountOksRightMutex);
+        PROFILE(RunAsyncCountOksAtomic);
+        PROFILE(RunSeqCountOks);
+        checker.ClearTests();
+        std::cerr << std::endl;
+    }
 
     // больше тестов
+    {
+        const auto more_short_queries = GenerateQueries(generator, 10'000'000, 10, 4);
+        AddQueriesToCheck(checker, more_short_queries);
 
-    const auto more_short_queries = GenerateQueries(generator, 10'000'000, 10, 4);
-    AddQueriesToCheck(checker, more_short_queries);
-
-    PROFILE(RunSeqCountOks);
-    PROFILE(RunCountOksTRSeq);
-    PROFILE(RunCountOksTRPar);
-    PROFILE(RunAsyncCountOksAtomicThreadPool);
+        PROFILE(RunSeqCountOks);
+        PROFILE(RunCountOksTRSeq);
+        PROFILE(RunCountOksTRPar);
+        PROFILE(RunAsyncCountOksAtomicThreadPool);
+    }
 }
